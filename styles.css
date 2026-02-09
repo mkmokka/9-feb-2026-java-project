@@ -1,76 +1,170 @@
-/* Reset some default styles */
+/* ==============================
+   Base / Reset
+============================== */
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Body styling */
 body {
-  background: #f0f4f8;
-  color: #333;
+  background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  transition: background 0.5s;
+}
+
+/* ==============================
+   Heading
+============================== */
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  color: #0d3b66;
+  margin-bottom: 35px;
+  letter-spacing: 0.5px;
+}
+
+/* ==============================
+   Auth Card (Glassmorphism Style)
+============================== */
+#auth-section {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 40px 50px;
+  border-radius: 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 50px 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
-/* Headings */
-h1 {
-  color: #1e3a8a;
-  font-size: 2.5rem;
-  margin-bottom: 30px;
-  text-align: center;
+#auth-section:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
 }
 
-/* Auth section container */
-#auth-section {
-  background: #ffffff;
-  padding: 30px 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+/* ==============================
+   Input Fields
+============================== */
+#auth-section input[type="email"],
+#auth-section input[type="password"] {
   width: 100%;
-  max-width: 400px;
-}
-
-/* Input fields */
-input[type="email"],
-input[type="password"] {
-  width: 100%;
-  padding: 12px 15px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
-}
-
-input[type="email"]:focus,
-input[type="password"]:focus {
-  border-color: #1e3a8a;
-  outline: none;
-}
-
-/* Buttons */
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  background-color: #1e3a8a;
-  color: white;
+  padding: 14px 18px;
+  margin-bottom: 20px;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 12px;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+#auth-section input[type="email"]:focus,
+#auth-section input[type="password"]:focus {
+  outline: none;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(13, 59, 102, 0.3);
+}
+
+/* ==============================
+   Buttons
+============================== */
+#auth-section button {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #0d3b66, #3f88c5);
+  border: none;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
 }
 
-button:hover {
-  background-color: #3749b0;
+#auth-section button:hover {
+  background: linear-gradient(135deg, #0b2c50, #3675a6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* Spacing between elements */
-br {
-  line-height: 1.5rem;
+#auth-section button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* ==============================
+   Alerts / Messages
+============================== */
+.alert {
+  margin-bottom: 20px;
+  padding: 12px 15px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.alert-success {
+  background-color: #e0f7ea;
+  color: #1b5e20;
+  box-shadow: 0 4px 12px rgba(27, 94, 32, 0.2);
+}
+
+.alert-error {
+  background-color: #fdecea;
+  color: #b71c1c;
+  box-shadow: 0 4px 12px rgba(183, 28, 28, 0.2);
+}
+
+/* ==============================
+   Footer / Links (Optional)
+============================== */
+#auth-section a {
+  color: #0d3b66;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+#auth-section a:hover {
+  color: #3f88c5;
+}
+
+/* ==============================
+   Smooth Animations
+============================== */
+body, #auth-section, button, input {
+  transition: all 0.3s ease-in-out;
+}
+
+/* ==============================
+   Responsive Design
+============================== */
+@media (max-width: 500px) {
+  #auth-section {
+    padding: 30px 25px;
+    border-radius: 16px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  #auth-section input,
+  #auth-section button {
+    font-size: 15px;
+    padding: 12px 14px;
+  }
 }
