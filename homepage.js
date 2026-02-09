@@ -17,19 +17,49 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// ===== Protect page =====
+// ===== Hide content until auth is verified =====
+document.body.style.display = "none"; // initially hide body
+
+// ===== Session Timeout Settings =====
+const SESSION_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+let lastActivity = Date.now();
+
+// Update last activity on user interaction
+document.addEventListener("mousemove", () => lastActivity = Date.now());
+document.addEventListener("keydown", () => lastActivity = Date.now());
+
+// Auto-logout after inactivity
+setInterval(() => {
+  if (Date.now() - lastActivity > SESSION_TIMEOUT) {
+    logout();
+  }
+}, 60 * 1000);
+
+// ===== Protect Page & Display User Info =====
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    alert("Please login first!");
-    window.location.href = "index.html";
-  } else {
-    const emailEl = document.getElementById("studentEmail");
-    if (emailEl) emailEl.innerText = user.email;
+    // Redirect immediately if not logged in
+    window.location.replace("index.html");
+    return;
   }
+
+  // Show page content now that user is verified
+  document.body.style.display = "block";
+
+  // Safely display user email
+  const emailEl = document.getElementById("studentEmail");
+  if (emailEl) emailEl.innerText = user.email || "Unknown Email";
 });
 
-// ===== Logout function =====
+// ===== Logout Function =====
 window.logout = async () => {
-  await signOut(auth);
-  window.location.href = "index.html";
+  try {
+    await signOut(auth);
+    localStorage.clear(); // clear any cached info
+    alert("Logged out successfully");
+    window.location.replace("index.html"); // prevent back navigation
+  } catch (err) {
+    console.error("Logout failed:", err);
+    alert("Logout failed, please try again");
+  }
 };
