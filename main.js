@@ -1,10 +1,18 @@
-// ===== Firebase Imports =====
+// ================= FIREBASE IMPORTS =================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, updatePassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getDatabase, ref, set, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import {
+  getAuth,
+  sendSignInLinkToEmail,
+  isSignInWithEmailLink,
+  signInWithEmailLink,
+  updatePassword,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+import { getDatabase } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
 
-// ===== Firebase Config =====
+// ================= FIREBASE CONFIG =================
 const firebaseConfig = {
   apiKey: "AIzaSyCh0fWsCCIM8F4iMz7tz1gbDl15vsV6bRg",
   authDomain: "moriomgame-fa3c7.firebaseapp.com",
@@ -16,69 +24,110 @@ const firebaseConfig = {
   measurementId: "G-H1CNT2YKDH"
 };
 
+// ================= INIT =================
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getDatabase(app);
+getDatabase(app);
 const analytics = getAnalytics(app);
 
-// ======= Registration (Send Email Link) =======
+// ================= HELPERS =================
+function isValidEmail(email) {
+  return typeof email === "string" && email.includes("@");
+}
+
+// ================= REGISTER =================
 async function registerWithEmail() {
-  const email = document.getElementById("regEmail").value;
+  const email = document.getElementById("regEmail")?.value.trim();
+
+  if (!isValidEmail(email)) {
+    alert("Invalid email address");
+    return;
+  }
+
   const actionCodeSettings = {
-    url: window.location.origin + '/finish.html',
+    url: window.location.origin + "/finish.html",
     handleCodeInApp: true
   };
+
   try {
     await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-    window.localStorage.setItem('emailForSignIn', email);
-    alert("Check your email to set your password!");
-    logEvent(analytics, 'sign_up', { method: 'email_link' });
+    localStorage.setItem("emailForSignIn", email);
+    alert("Check your email to complete registration");
+    logEvent(analytics, "sign_up", { method: "email_link" });
   } catch (err) {
-    alert(err.message);
+    alert("Registration failed");
+    console.error(err);
   }
 }
 
-// ======= Login with Email + Password =======
+// ================= LOGIN =================
 async function loginWithPassword() {
-  const email = document.getElementById("logEmail").value;
-  const password = document.getElementById("logPass").value;
+  const email = document.getElementById("logEmail")?.value.trim();
+  const password = document.getElementById("logPass")?.value;
+
+  if (!email || !password) {
+    alert("Email and password required");
+    return;
+  }
+
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    alert("Login successful! Redirecting to homepage...");
     window.location.href = "homepage.html";
   } catch (err) {
-    alert(err.message);
+    alert("Login failed");
+    console.error(err);
   }
 }
 
-// ======= Magic Link Handling =======
-if (window.location.pathname.includes('finish.html')) {
-  window.onload = async () => {
-    const url = window.location.href;
-    if (isSignInWithEmailLink(auth, url)) {
-      let email = window.localStorage.getItem('emailForSignIn');
-      if (!email) email = prompt("Enter your email to confirm");
-      try {
-        const result = await signInWithEmailLink(auth, email, url);
-        window.localStorage.removeItem('emailForSignIn');
+// ================= MAGIC LINK HANDLER =================
+async function handleMagicLink() {
+  if (!isSignInWithEmailLink(auth, window.location.href)) return;
 
-        const passwordInput = document.getElementById("passwordInput");
-        const submitBtn = document.getElementById("setPasswordBtn");
-        submitBtn.onclick = async () => {
-          const password = passwordInput.value;
-          if (password.length < 6) { alert("Password must be 6+ characters"); return; }
-          await updatePassword(result.user, password);
-          alert("Password set! You can login now.");
-          window.location.href = "index.html";
-        };
-      } catch (err) { alert(err.message); }
-    }
-  };
+  let email = localStorage.getItem("emailForSignIn");
+  if (!email) email = prompt("Confirm your email");
+
+  if (!email) return;
+
+  try {
+    const result = await signInWithEmailLink(auth, email, window.location.href);
+    localStorage.removeItem("emailForSignIn");
+
+    const passwordInput = document.getElementById("passwordInput");
+    const setPasswordBtn = document.getElementById("setPasswordBtn");
+
+    if (!passwordInput || !setPasswordBtn) return;
+
+    setPasswordBtn.addEventListener("click", async () => {
+      const password = passwordInput.value;
+
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters");
+        return;
+      }
+
+      await updatePassword(result.user, password);
+      alert("Password set successfully");
+      window.location.href = "index.html";
+    });
+
+  } catch (err) {
+    alert("Invalid or expired link");
+    console.error(err);
+  }
 }
 
-window.registerWithEmail = registerWithEmail;
-window.loginWithPassword = loginWithPassword;
+// ================= EVENT BINDING =================
+document.addEventListener("DOMContentLoaded", () => {
 
+  document
+    .getElementById("registerBtn")
+    ?.addEventListener("click", registerWithEmail);
 
+  document
+    .getElementById("loginBtn")
+    ?.addEventListener("click", loginWithPassword);
 
-
+  if (window.location.pathname.includes("finish.html")) {
+    handleMagicLink();
+  }
+});
