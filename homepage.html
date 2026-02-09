@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Homepage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Firebase + Auth handled in homepage.js -->
+  <script type="module" src="homepage.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #eef2f5;
+    }
+
+    .box {
+      max-width: 500px;
+      margin: 60px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .email {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #4CAF50;
+      color: white;
+    }
+
+    button:hover {
+      background: #43a047;
+    }
+
+    .logout {
+      background: #e53935;
+    }
+
+    .logout:hover {
+      background: #d32f2f;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+    <h1>Student Homepage</h1>
+    <div class="email">
+      Logged in as: <span id="studentEmail">Loading...</span>
+    </div>
+
+    <button onclick="location.href='profile.html'">👤 My Profile</button>
+    <button onclick="location.href='result.html'">📊 View Result</button>
+    <button onclick="location.href='exam.html'">📝 Attend Exam</button>
+    <button onclick="location.href='assignment.html'">📂 Submit Assignment</button>
+
+    <button class="logout" onclick="logout()">🚪 Logout</button>
+  </div>
+
+</body>
+</html>
