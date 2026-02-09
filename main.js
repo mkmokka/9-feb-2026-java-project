@@ -39,15 +39,19 @@ function isValidEmail(email) {
 async function registerWithEmail() {
   const email = document.getElementById("regEmail")?.value.trim();
 
+  // Validate email format
   if (!isValidEmail(email)) {
     alert("Invalid email address");
     return;
   }
 
   const actionCodeSettings = {
-    url: window.location.origin + "/finish.html",
-    handleCodeInApp: true
+    url: window.location.origin + "/finish.html", // The page the user lands after clicking the link
+    handleCodeInApp: true // Firebase should handle the link in the app
   };
+
+  // Log the email before attempting to send the link
+  console.log("Sending sign-in link to email:", email);
 
   // Check if the user is online
   if (!navigator.onLine) {
@@ -55,30 +59,29 @@ async function registerWithEmail() {
     return;
   }
 
-  // Log the email before attempting to send the link
-  console.log("Sending sign-in link to email:", email);
-
   try {
-    // Attempt to send the sign-in link
+    // Attempt to send the sign-in link to the email
     await sendSignInLinkToEmail(auth, email, actionCodeSettings);
 
-    // Log success if the link is sent
+    // Log success and store the email in localStorage
     console.log("Link sent successfully");
-
     localStorage.setItem("emailForSignIn", email);
+
+    // Inform the user to check their email
     alert("Check your email to complete registration");
 
-    // Track event for analytics
+    // Track analytics event for sign-up
     logEvent(analytics, "sign_up", { method: "email_link" });
 
   } catch (err) {
-    // Log the error if something goes wrong
+    // Log error details to the console
     console.error("Error sending sign-in link:", err);
 
+    // Specific error handling for network request failure
     if (err.code === 'auth/network-request-failed') {
       alert("Network error: Please check your internet connection and try again.");
     } else {
-      alert("Registration failed. Please try again later.");
+      alert(`Registration failed: ${err.message || "Unknown error"}`);
     }
   }
 }
@@ -94,9 +97,14 @@ async function loginWithPassword() {
   }
 
   try {
+    // Attempt to log in with email and password
     await signInWithEmailAndPassword(auth, email, password);
+
+    // Redirect to the homepage upon success
     window.location.href = "homepage.html";
+
   } catch (err) {
+    // Log login failure and show alert
     alert("Login failed");
     console.error(err);
   }
@@ -112,9 +120,13 @@ async function handleMagicLink() {
   if (!email) return;
 
   try {
+    // Attempt to sign in using the magic link
     const result = await signInWithEmailLink(auth, email, window.location.href);
+
+    // Remove email from localStorage
     localStorage.removeItem("emailForSignIn");
 
+    // Setup password input and button
     const passwordInput = document.getElementById("passwordInput");
     const setPasswordBtn = document.getElementById("setPasswordBtn");
 
@@ -123,17 +135,24 @@ async function handleMagicLink() {
     setPasswordBtn.addEventListener("click", async () => {
       const password = passwordInput.value;
 
+      // Validate password length
       if (password.length < 6) {
         alert("Password must be at least 6 characters");
         return;
       }
 
+      // Update the password for the signed-in user
       await updatePassword(result.user, password);
+
+      // Inform the user that the password was set successfully
       alert("Password set successfully");
+
+      // Redirect to the homepage
       window.location.href = "index.html";
     });
 
   } catch (err) {
+    // Handle invalid or expired link
     alert("Invalid or expired link");
     console.error(err);
   }
@@ -142,14 +161,17 @@ async function handleMagicLink() {
 // ================= EVENT BINDING =================
 document.addEventListener("DOMContentLoaded", () => {
 
+  // Register button click event handler
   document
     .getElementById("registerBtn")
     ?.addEventListener("click", registerWithEmail);
 
+  // Login button click event handler
   document
     .getElementById("loginBtn")
     ?.addEventListener("click", loginWithPassword);
 
+  // Handle magic link if on the "finish.html" page
   if (window.location.pathname.includes("finish.html")) {
     handleMagicLink();
   }
