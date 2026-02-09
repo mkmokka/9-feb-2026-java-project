@@ -49,6 +49,12 @@ async function registerWithEmail() {
     handleCodeInApp: true
   };
 
+  // Check if the user is online
+  if (!navigator.onLine) {
+    alert("No internet connection. Please check your connection and try again.");
+    return;
+  }
+
   // Log the email before attempting to send the link
   console.log("Sending sign-in link to email:", email);
 
@@ -68,7 +74,12 @@ async function registerWithEmail() {
   } catch (err) {
     // Log the error if something goes wrong
     console.error("Error sending sign-in link:", err);
-    alert("Registration failed");
+
+    if (err.code === 'auth/network-request-failed') {
+      alert("Network error: Please check your internet connection and try again.");
+    } else {
+      alert("Registration failed. Please try again later.");
+    }
   }
 }
 
