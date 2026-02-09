@@ -49,14 +49,26 @@ async function registerWithEmail() {
     handleCodeInApp: true
   };
 
+  // Log the email before attempting to send the link
+  console.log("Sending sign-in link to email:", email);
+
   try {
+    // Attempt to send the sign-in link
     await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+
+    // Log success if the link is sent
+    console.log("Link sent successfully");
+
     localStorage.setItem("emailForSignIn", email);
     alert("Check your email to complete registration");
+
+    // Track event for analytics
     logEvent(analytics, "sign_up", { method: "email_link" });
+
   } catch (err) {
+    // Log the error if something goes wrong
+    console.error("Error sending sign-in link:", err);
     alert("Registration failed");
-    console.error(err);
   }
 }
 
