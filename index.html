@@ -1,41 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>Study Time</title>
 
- 
-<link rel="icon" type="image/png" href="logo.png">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="logo.png">
 
-  
+  <!-- Security Headers -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Referrer-Policy" content="no-referrer">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
+
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy"
+        content="
+          default-src 'self';
+          script-src 'self';
+          style-src 'self';
+          img-src 'self' data:;
+          font-src 'self';
+          connect-src 'self';
+          frame-ancestors 'none';
+          form-action 'self';
+          base-uri 'self';
+        ">
+
+  <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
+
+  <!-- JavaScript -->
   <script type="module" src="main.js"></script>
 </head>
 
 <body>
 
   <h1>STUDY TIME</h1>
-   <link rel="stylesheet" href="styles.css">
 
   <!-- Login/Register Section -->
   <div id="auth-section">
-    <input type="email" id="regEmail" placeholder="Enter email to register" />
+    <input
+      type="email"
+      id="regEmail"
+      placeholder="Enter email to register"
+      autocomplete="email"
+      required
+    />
     <button onclick="registerWithEmail()">Register with Email Link</button>
+
     <br /><br />
-    <input type="email" id="logEmail" placeholder="Enter email to login" />
-    <input type="password" id="logPass" placeholder="Enter password" />
+
+    <input
+      type="email"
+      id="logEmail"
+      placeholder="Enter email to login"
+      autocomplete="email"
+      required
+    />
+
+    <input
+      type="password"
+      id="logPass"
+      placeholder="Enter password"
+      autocomplete="current-password"
+      required
+    />
+
     <button onclick="loginWithPassword()">Login</button>
   </div>
 
-
-
 </body>
-
-
 </html>
-
-
-
-
