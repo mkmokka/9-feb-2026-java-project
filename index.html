@@ -9,30 +9,22 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="logo.png">
 
-  <!-- ================= SECURITY HEADERS ================= -->
-
-  <!-- Prevent MIME sniffing -->
+  <!-- ========== SECURITY HEADERS ========== -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
-
-  <!-- Prevent clickjacking -->
   <meta http-equiv="X-Frame-Options" content="DENY">
-
-  <!-- Prevent referrer data leak -->
   <meta http-equiv="Referrer-Policy" content="no-referrer">
-
-  <!-- Lock browser permissions -->
   <meta http-equiv="Permissions-Policy"
         content="camera=(), microphone=(), geolocation=(), payment=()">
 
-  <!-- STRONG Content Security Policy -->
+  <!-- STRONG CSP (Firebase allowed, inline JS blocked) -->
   <meta http-equiv="Content-Security-Policy"
         content="
           default-src 'self';
-          script-src 'self';
+          script-src 'self' https://www.gstatic.com;
           style-src 'self';
           img-src 'self' data:;
           font-src 'self';
-          connect-src 'self';
+          connect-src 'self' https://*.firebaseio.com https://www.googleapis.com;
           frame-ancestors 'none';
           object-src 'none';
           base-uri 'none';
@@ -42,7 +34,7 @@
   <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- JavaScript (module = safer scope) -->
+  <!-- Main JS -->
   <script type="module" src="main.js"></script>
 </head>
 
@@ -50,7 +42,7 @@
 
   <h1>STUDY TIME</h1>
 
-  <!-- ================= AUTH SECTION ================= -->
+  <!-- AUTH SECTION -->
   <div id="auth-section">
 
     <input
