@@ -2,15 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>Set Password</title>
+
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="styles-password.css">
 
+  <!-- ================= SECURITY ================= -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Referrer-Policy" content="no-referrer">
+  <meta http-equiv="Permissions-Policy"
+        content="camera=(), microphone=(), geolocation=(), payment=()">
+
+  <!-- STRONG CSP -->
+  <meta http-equiv="Content-Security-Policy"
+        content="
+          default-src 'self';
+          script-src 'self' https://www.gstatic.com;
+          style-src 'self';
+          img-src 'self' data:;
+          connect-src 'self' https://*.firebaseio.com https://www.googleapis.com;
+          frame-ancestors 'none';
+          object-src 'none';
+          base-uri 'none';
+        ">
+
+  <!-- Main JS -->
   <script type="module" src="main.js"></script>
 </head>
+
 <body>
-  <h2>Set your password</h2>
-  <input type="password" id="passwordInput" placeholder="Enter password" />
-  <button id="setPasswordBtn">Set Password</button>
+  <h2>Set Your Password</h2>
+
+  <div id="password-section">
+    <input
+      type="password"
+      id="passwordInput"
+      placeholder="Enter password"
+      autocomplete="new-password"
+      required
+    />
+
+    <button id="setPasswordBtn">
+      Set Password
+    </button>
+  </div>
+
 </body>
 </html>
-
