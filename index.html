@@ -4,18 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>STUDY TIME</title>
+  <title>Study Time</title>
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="logo.png">
 
-  <!-- Security Headers -->
-  <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="X-Frame-Options" content="DENY">
-  <meta http-equiv="Referrer-Policy" content="no-referrer">
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
+  <!-- ================= SECURITY HEADERS ================= -->
 
-  <!-- Content Security Policy -->
+  <!-- Prevent MIME sniffing -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+
+  <!-- Prevent clickjacking -->
+  <meta http-equiv="X-Frame-Options" content="DENY">
+
+  <!-- Prevent referrer data leak -->
+  <meta http-equiv="Referrer-Policy" content="no-referrer">
+
+  <!-- Lock browser permissions -->
+  <meta http-equiv="Permissions-Policy"
+        content="camera=(), microphone=(), geolocation=(), payment=()">
+
+  <!-- STRONG Content Security Policy -->
   <meta http-equiv="Content-Security-Policy"
         content="
           default-src 'self';
@@ -25,14 +34,15 @@
           font-src 'self';
           connect-src 'self';
           frame-ancestors 'none';
+          object-src 'none';
+          base-uri 'none';
           form-action 'self';
-          base-uri 'self';
         ">
 
   <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- JavaScript -->
+  <!-- JavaScript (module = safer scope) -->
   <script type="module" src="main.js"></script>
 </head>
 
@@ -40,8 +50,9 @@
 
   <h1>STUDY TIME</h1>
 
-  <!-- Login/Register Section -->
+  <!-- ================= AUTH SECTION ================= -->
   <div id="auth-section">
+
     <input
       type="email"
       id="regEmail"
@@ -49,7 +60,10 @@
       autocomplete="email"
       required
     />
-    <button onclick="registerWithEmail()">Register with Email Link</button>
+
+    <button id="registerBtn">
+      Register with Email Link
+    </button>
 
     <br /><br />
 
@@ -69,9 +83,11 @@
       required
     />
 
-    <button onclick="loginWithPassword()">Login</button>
+    <button id="loginBtn">
+      Login
+    </button>
+
   </div>
 
 </body>
 </html>
-
